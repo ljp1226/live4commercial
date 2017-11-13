@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:mysql://123.206.26.26:3306/junlin
+    driver-class-name: com.mysql.jdbc.Driver
+    username: mengmeng
+    password: lyp82nlf
+    max-active: 300
+    test-while-idle: true
+    time-between-eviction-runs-millis: 300000
+    min-evictable-idle-time-millis: 1800000
+    validation-query: select 'x'
+
+  jpa:
+    database: mysql
+    generate-ddl: false
+    show-sql: false
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+      ddl-auto: none
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+#dubbo配置
+#dubboCfg:
+#  registry:
+#    address: 127.0.0.1:2181
+#  protocol:
+#    port: 20881
+#  provider:
+#    host: 127.0.0.1

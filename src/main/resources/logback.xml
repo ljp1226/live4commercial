@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60 seconds">
+    <!-- log base path -->
+    <property name="LOG_HOME" value="../logs"/>
+    <property name="SRVNAME" value="web_log"/>
+
+    <property name="Redis" value="redis/queue_log"/>
+    <property name="DUBBO" value="dubboLogs/dubbo_log"/>
+
+    <!-- back log base path -->
+    <property name="LOG_BACK_HOME" value="../logs/backup"/>
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${SRVNAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_BACK_HOME}/${SRVNAME}/%d{yyyy-MM-dd}.%i.log.zip
+            </fileNamePattern>
+            <maxFileSize>400MB</maxFileSize>  <!-- 文件大小 -->
+            <maxHistory>60</maxHistory>  <!-- 最大的文件保存天数 -->
+            <totalSizeCap>100GB</totalSizeCap><!-- 文件总容量 -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level %logger{100} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--redis异步处理日志-->
+    <appender name="Redis_logs"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${Redis}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_BACK_HOME}/${Redis}/%d{yyyy-MM-dd}.%i.log.zip
+            </fileNamePattern>
+            <maxFileSize>400MB</maxFileSize>  <!-- 文件大小 -->
+            <maxHistory>60</maxHistory>  <!-- 最大的文件保存天数 -->
+            <totalSizeCap>100GB</totalSizeCap><!-- 文件总容量 -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level %logger{100} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--DUBBO服务日志记录-->
+    <appender name="DUBBO_LOG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${DUBBO}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_BACK_HOME}/${DUBBO}/%d{yyyy-MM-dd}.%i.log.zip
+            </fileNamePattern>
+            <maxFileSize>400MB</maxFileSize>  <!-- 文件大小 -->
+            <maxHistory>60</maxHistory>  <!-- 最大的文件保存天数 -->
+            <totalSizeCap>100GB</totalSizeCap><!-- 文件总容量 -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-5level %logger{100} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyyMMddHHmmss} [%thread] [%c %2M %2L] %-3p - %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <logger name="org.springframework.web.servlet" level="info"/>
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="warn"/>
+
+    <!--DUBBO服务日志-->
+    <logger name="com.admire.live" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="DUBBO_LOG"/>
+    </logger>
+</configuration>
